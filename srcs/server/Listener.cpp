@@ -45,7 +45,7 @@ bool    Listener::setup()
 
 bool    Listener::createSocket()
 {
-    _listenFd = socket(AF_INET, SOCK_STREAM, 0);
+    _listenFd = ::socket(AF_INET, SOCK_STREAM, 0);
     if (_listenFd == -1)
         return (reportSystemError("socket"));
 
@@ -58,7 +58,7 @@ bool    Listener::setSocketOption()
     int option;
 
     option = 1;
-    if (setsockopt(_listenFd, SOL_SOCKET, SO_REUSEADDR, &option,
+    if (::setsockopt(_listenFd, SOL_SOCKET, SO_REUSEADDR, &option,
         sizeof(option)) == -1)
         return (reportSystemError("setsockopt"));
 
@@ -74,7 +74,7 @@ bool    Listener::setNonBlocking()
 
 bool    Listener::setNonBlocking(int fd)
 {
-    if (fcntl(fd, F_SETFL, O_NONBLOCK) == -1)
+    if (::fcntl(fd, F_SETFL, O_NONBLOCK) == -1)
         return (reportSystemError("fcntl"));
 
     return (true);
@@ -87,10 +87,10 @@ bool    Listener::bindSocket()
 
     std::memset(&address, 0, sizeof(address));
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = htonl(INADDR_ANY);
-    address.sin_port = htons(_port);
+    address.sin_addr.s_addr = ::htonl(INADDR_ANY);
+    address.sin_port = ::htons(_port);
 
-    if (bind(_listenFd, reinterpret_cast<struct sockaddr *>(&address),
+    if (::bind(_listenFd, reinterpret_cast<struct sockaddr *>(&address),
         sizeof(address)) == -1)
         return (reportSystemError("bind"));
 
@@ -100,7 +100,7 @@ bool    Listener::bindSocket()
 
 bool    Listener::listenSocket()
 {
-    if (listen(_listenFd, SOMAXCONN) == -1)
+    if (::listen(_listenFd, SOMAXCONN) == -1)
         return (reportSystemError("listen"));
 
     std::cout << "server is listening on port " << _port << std::endl;
@@ -110,7 +110,7 @@ bool    Listener::listenSocket()
 
 bool    Listener::acceptClient(int &clientFd)
 {
-    clientFd = accept(_listenFd, NULL, NULL);
+    clientFd = ::accept(_listenFd, NULL, NULL);
     if (clientFd == -1)
     {
         if (errno == EINTR)
@@ -127,7 +127,7 @@ bool    Listener::acceptClient(int &clientFd)
 
     if (!setNonBlocking(clientFd))
     {
-        close(clientFd);
+        ::close(clientFd);
         clientFd = -1;
         return (false);
     }
@@ -146,7 +146,7 @@ void    Listener::closeSocket()
 {
     if (_listenFd != -1)
     {
-        close(_listenFd);
+        ::close(_listenFd);
         _listenFd = -1;
     }
 }

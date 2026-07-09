@@ -18,7 +18,7 @@ bool    Event::wait(std::vector<struct pollfd> &pollFds)
 {
     int readyCount;
 
-    readyCount = poll(&pollFds[0], pollFds.size(), -1);
+    readyCount = ::poll(&pollFds[0], pollFds.size(), -1);
     if (readyCount == -1)
     {
         if (errno == EINTR)

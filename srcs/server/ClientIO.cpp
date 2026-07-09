@@ -59,7 +59,7 @@ bool    ClientIO::receive(ClientManager &clients, ChannelManager &channels,
 
     while (true)
     {
-        bytesRead = recv(clientFd, buffer, sizeof(buffer), 0);
+        bytesRead = ::recv(clientFd, buffer, sizeof(buffer), 0);
         if (bytesRead > 0)
         {
 #ifdef DEBUG_RECV

@@ -35,22 +35,22 @@ bool    Signal::setup()
     std::memset(&action, 0, sizeof(action));
     action.sa_handler = handleStopSignal;
 
-    if (sigemptyset(&action.sa_mask) == -1)
+    if (::sigemptyset(&action.sa_mask) == -1)
         return (reportSystemError("sigemptyset"));
 
-    if (sigaction(SIGINT, &action, NULL) == -1)
+    if (::sigaction(SIGINT, &action, NULL) == -1)
         return (reportSystemError("sigaction"));
 
-    if (sigaction(SIGTERM, &action, NULL) == -1)
+    if (::sigaction(SIGTERM, &action, NULL) == -1)
         return (reportSystemError("sigaction"));
 
     std::memset(&ignoreAction, 0, sizeof(ignoreAction));
     ignoreAction.sa_handler = SIG_IGN;
 
-    if (sigemptyset(&ignoreAction.sa_mask) == -1)
+    if (::sigemptyset(&ignoreAction.sa_mask) == -1)
         return (reportSystemError("sigemptyset"));
 
-    if (sigaction(SIGPIPE, &ignoreAction, NULL) == -1)
+    if (::sigaction(SIGPIPE, &ignoreAction, NULL) == -1)
         return (reportSystemError("sigaction"));
 
     return (true);

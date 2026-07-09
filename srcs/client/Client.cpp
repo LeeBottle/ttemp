@@ -20,7 +20,7 @@ Client::~Client()
 {
     if (_fd != -1)
     {
-        close(_fd);
+        ::close(_fd);
         _fd = -1;
     }
 }

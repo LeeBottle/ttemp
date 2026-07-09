@@ -18,8 +18,8 @@ ModeChange::ModeChange()
       params(),
       paramIndex(2),
       sign('+'),
-      operations(),
-      currentSign('\0')
+      currentSign('\0'),
+      operations()
 {
 }
 
